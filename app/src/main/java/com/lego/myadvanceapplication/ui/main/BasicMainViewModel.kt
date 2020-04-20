@@ -1,4 +1,6 @@
 package com.lego.myadvanceapplication.ui.main
 
-class BasicMainViewModel {
+import androidx.lifecycle.ViewModel
+
+class BasicMainViewModel : ViewModel() {
 }

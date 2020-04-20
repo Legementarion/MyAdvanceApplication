@@ -2,8 +2,9 @@ package com.lego.myadvanceapplication.ui.main
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import com.lego.myadvanceapplication.R
+import com.lego.myadvanceapplication.ui.base.navigateToSettings
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -15,10 +16,10 @@ class MainActivity : AppCompatActivity() {
 
         viewModelBasic = BasicMainViewModel()
 
-    }
+        settingsBtn.setOnClickListener {
+            navigateToSettings()
+        }
 
-    fun onSettingsButtonClicked(v: View) {
-//        viewModelBasic.deleteUser(selectedUser)
     }
 
 }
