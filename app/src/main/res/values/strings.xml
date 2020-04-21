@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <string name="app_name">MyAdvanceApplication</string>
     <string name="title_activity_maps">Map</string>
     <string name="title_activity_settings">Settings</string>
@@ -19,5 +19,9 @@
     <string name="settings">Settings</string>
     <string name="notification">Notification</string>
     <string name="pref_key_night">theme</string>
+    <string name="dark_mode">Dark mode</string>
+    <string name="pref_key_notification">notifications</string>
+    <string name="empty_result">empty result</string>
+    <string name="empty_list">Nothing to show yet</string>
 
 </resources>

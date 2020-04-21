@@ -3,7 +3,7 @@
     <PreferenceCategory app:title="@string/notification">
 
         <SwitchPreferenceCompat
-            app:key="notifications"
+            app:key="@string/pref_key_notification"
             app:summary="Notify if something happened"
             app:title="@string/notification"/>
 
@@ -12,8 +12,8 @@
     <PreferenceCategory app:title="Theme">
 
         <SwitchPreferenceCompat
-            app:key="theme"
-            app:title="Dark mode" />
+            app:key="@string/pref_key_night"
+            app:title="@string/dark_mode" />
 
     </PreferenceCategory>
 
