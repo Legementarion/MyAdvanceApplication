@@ -1,4 +1,6 @@
 package com.lego.myadvanceapplication.domain.news.usecase
 
-class GetTopNewsUseCase {
+import com.lego.myadvanceapplication.domain.news.repository.RedditRepository
+
+class GetTopNewsUseCase(repository: RedditRepository) {
 }

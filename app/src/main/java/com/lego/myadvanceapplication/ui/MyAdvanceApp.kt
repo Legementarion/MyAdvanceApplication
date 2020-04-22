@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO
 import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES
 import androidx.preference.PreferenceManager
 import com.lego.myadvanceapplication.R
+import com.lego.myadvanceapplication.core.baseModule
 import com.lego.myadvanceapplication.ui.main.BasicMainViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -21,7 +22,7 @@ class MyAdvanceApp : Application() {
             // Android context
             androidContext(this@MyAdvanceApp)
             // modules
-            modules(myModule)
+            modules(baseModule)
         }
 
         val preferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)
@@ -29,11 +30,6 @@ class MyAdvanceApp : Application() {
             true -> AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES)
             false -> AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO)
         }
-    }
-
-    private val myModule = module {
-        viewModel { BasicMainViewModel() }
-//        single { Controller(get()) }
     }
 
 }
