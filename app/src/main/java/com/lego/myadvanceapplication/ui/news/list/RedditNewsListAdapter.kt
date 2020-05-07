@@ -11,7 +11,7 @@ import com.lego.myadvanceapplication.domain.news.model.RedditPost
 import kotlinx.android.extensions.LayoutContainer
 
 class RedditNewsListAdapter(
-    private val clickListener: () -> Unit
+    private val clickListener: (id: Long) -> Unit
 ) : PagedListAdapter<RedditPost, RedditNewsListAdapter.NewsViewHolder>(DIFF_CALLBACK) {
 
     companion object {
@@ -35,14 +35,19 @@ class RedditNewsListAdapter(
     }
 
     override fun onBindViewHolder(holder: NewsViewHolder, position: Int) {
-        getItem(position).let { holder.bindData(clickListener) }
+        getItem(position)?.let { holder.bindData(it, clickListener) }
     }
 
     inner class NewsViewHolder(override val containerView: View) :
         RecyclerView.ViewHolder(containerView), LayoutContainer {
 
-        fun bindData(clickListener: () -> Unit) {
-            containerView
+        fun bindData(
+            post: RedditPost,
+            clickListener: (id: Long) -> Unit
+        ) {
+            containerView.setOnClickListener {
+                clickListener(post.id)
+            }
         }
 
     }
