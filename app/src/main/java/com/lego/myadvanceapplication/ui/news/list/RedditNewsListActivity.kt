@@ -1,4 +1,4 @@
-package com.lego.myadvanceapplication.ui.news
+package com.lego.myadvanceapplication.ui.news.list
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

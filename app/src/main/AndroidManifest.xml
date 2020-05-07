@@ -22,7 +22,9 @@
             android:name=".ui.settings.SettingsActivity"
             android:label="@string/title_activity_settings" />
 
-        <activity android:name=".ui.news.RedditNewsListActivity" />
+        <activity android:name=".ui.news.list.RedditNewsListActivity" />
+
+        <activity android:name=".ui.news.details.RedditDetailsActivity" />
 
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
