@@ -5,18 +5,19 @@ import com.lego.myadvanceapplication.core.notification.NotificationController
 import com.lego.myadvanceapplication.data.RedditLocalDataSourceImpl
 import com.lego.myadvanceapplication.data.RedditRemoteDataSourceImpl
 import com.lego.myadvanceapplication.data.local.AppDatabase
-import com.lego.myadvanceapplication.data.local.RedditDao
 import com.lego.myadvanceapplication.data.remote.RedditApiInitializer
 import com.lego.myadvanceapplication.domain.news.repository.RedditRepository
 import com.lego.myadvanceapplication.domain.news.repository.RedditRepositoryImpl
 import com.lego.myadvanceapplication.domain.news.usecase.GetTopNewsUseCase
 import com.lego.myadvanceapplication.ui.main.BasicMainViewModel
+import com.lego.myadvanceapplication.ui.news.list.RedditNewsViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 private val viewModule = module {
     viewModel { BasicMainViewModel() }
+    viewModel { RedditNewsViewModel(get()) }
 }
 
 private val networkModule = module {
