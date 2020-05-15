@@ -2,6 +2,7 @@ package com.lego.myadvanceapplication.ui.base
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
+import com.lego.myadvanceapplication.ui.chat.ChatPushActivity
 import com.lego.myadvanceapplication.ui.main.MainActivity
 import com.lego.myadvanceapplication.ui.news.list.RedditNewsListActivity
 import com.lego.myadvanceapplication.ui.settings.SettingsActivity
@@ -12,6 +13,10 @@ fun AppCompatActivity.navigateToSettings() {
 
 fun AppCompatActivity.navigateToFeed() {
     startActivity(Intent(this, RedditNewsListActivity::class.java))
+}
+
+fun AppCompatActivity.navigateToChat() {
+    startActivity(Intent(this, ChatPushActivity::class.java))
 }
 
 fun AppCompatActivity.navigateToMain() {

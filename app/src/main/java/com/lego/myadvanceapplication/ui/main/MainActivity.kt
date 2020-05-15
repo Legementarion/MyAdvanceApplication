@@ -3,6 +3,7 @@ package com.lego.myadvanceapplication.ui.main
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.lego.myadvanceapplication.R
+import com.lego.myadvanceapplication.ui.base.navigateToChat
 import com.lego.myadvanceapplication.ui.base.navigateToFeed
 import com.lego.myadvanceapplication.ui.base.navigateToSettings
 import kotlinx.android.synthetic.main.activity_main.*
@@ -23,6 +24,10 @@ class MainActivity : AppCompatActivity() {
 
         feedBtn.setOnClickListener {
             navigateToFeed()
+        }
+
+        chatBtn.setOnClickListener {
+            navigateToChat()
         }
 
     }

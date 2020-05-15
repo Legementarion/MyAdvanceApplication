@@ -23,5 +23,7 @@
     <string name="pref_key_notification">notifications</string>
     <string name="empty_result">empty result</string>
     <string name="empty_list">Nothing to show yet</string>
+    <string name="feed">Feed</string>
+    <string name="chat">Chat</string>
 
 </resources>
