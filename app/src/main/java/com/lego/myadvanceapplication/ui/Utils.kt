@@ -8,8 +8,9 @@ import com.lego.myadvanceapplication.R
 fun loadImage(url: String, context: Context) =
     Glide
         .with(context)
-//      .placeholder(R.drawable.loading_spinner) //todo make placeholder for images
         .load(url)
+        .placeholder(R.drawable.ic_launcher_foreground)
+        .error(R.drawable.ic_launcher_foreground)
 
 fun ImageView.loadImage(url: String) =
     loadImage(url, context)

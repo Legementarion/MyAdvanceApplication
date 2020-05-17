@@ -1,6 +1,10 @@
 package com.lego.myadvanceapplication.data
 
 import com.lego.myadvanceapplication.data.models.NewsResponse
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Query
@@ -19,5 +23,29 @@ interface RedditApi {
 
     @POST
     fun authorize()
+
+    companion object {
+        private var retrofit: Retrofit? = null
+
+        fun getRetrofitInstance(): Retrofit {
+            if (retrofit == null) {
+                val logging = HttpLoggingInterceptor()
+                logging.level = HttpLoggingInterceptor.Level.BODY
+                val httpClient = OkHttpClient.Builder()
+                httpClient.addInterceptor(logging)
+
+                retrofit = Retrofit.Builder()
+                    .baseUrl(BASE_URL)
+                    .client(httpClient.build())
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build()
+
+            }
+            return retrofit!!
+        }
+
+
+        private const val BASE_URL = "https://www.reddit.com/"
+    }
 
 }

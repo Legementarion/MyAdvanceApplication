@@ -8,10 +8,12 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.lego.myadvanceapplication.R
 import com.lego.myadvanceapplication.domain.news.model.RedditPost
+import com.lego.myadvanceapplication.ui.loadImage
 import kotlinx.android.extensions.LayoutContainer
+import kotlinx.android.synthetic.main.news_list_item.view.*
 
 class RedditNewsListAdapter(
-    private val clickListener: (id: Long) -> Unit
+    private val clickListener: (id: String) -> Unit
 ) : PagedListAdapter<RedditPost, RedditNewsListAdapter.NewsViewHolder>(DIFF_CALLBACK) {
 
     companion object {
@@ -43,10 +45,17 @@ class RedditNewsListAdapter(
 
         fun bindData(
             post: RedditPost,
-            clickListener: (id: Long) -> Unit
+            clickListener: (id: String) -> Unit
         ) {
-            containerView.setOnClickListener {
-                clickListener(post.id)
+            with(containerView) {
+                tvCaption.text = post.title
+                tvChannelName.text = post.subreddit
+                tvCommentsNumber.text = post.numComments.toString()
+//                tvLikeCount.text = post todo
+                ivNewCover.loadImage(post.thumbnail)
+                setOnClickListener {
+                    clickListener(post.id)
+                }
             }
         }
 

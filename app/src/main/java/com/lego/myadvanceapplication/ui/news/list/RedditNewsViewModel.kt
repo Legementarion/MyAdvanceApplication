@@ -1,49 +1,55 @@
 package com.lego.myadvanceapplication.ui.news.list
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
+import androidx.paging.DataSource
+import androidx.paging.LivePagedListBuilder
+import androidx.paging.PagedList
 import com.lego.myadvanceapplication.domain.news.model.RedditPost
 import com.lego.myadvanceapplication.domain.news.usecase.GetTopNewsUseCase
-import kotlinx.coroutines.*
 
 class RedditNewsViewModel(private val getTopNewsUseCase: GetTopNewsUseCase) : ViewModel() {
 
-    private val viewModelJob = SupervisorJob()
-    private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
-    val list: MutableLiveData<List<RedditPost>> = MutableLiveData()
+    private lateinit var dataSource: RedditNewsDataSource
+    private var postsLiveData: LiveData<PagedList<RedditPost>>
+    val newsDataSourceLiveData = MutableLiveData<RedditNewsDataSource>()
 
-    override fun onCleared() {
-        super.onCleared()
-        viewModelJob.cancel()
+    fun getState(): LiveData<RedditNewsDataSource.State> =
+        Transformations.switchMap(newsDataSourceLiveData, RedditNewsDataSource::state)
+
+    init {
+        val config = PagedList.Config.Builder()
+            .setPageSize(LIST_SIZE)
+            .setInitialLoadSizeHint(LIST_SIZE)
+            .setEnablePlaceholders(false)
+            .build()
+        postsLiveData = initializedPagedListBuilder(config).build()
     }
 
+    fun getPosts(): LiveData<PagedList<RedditPost>> = postsLiveData
 
-    fun openNewsDetails(it: Long) {
+    private fun initializedPagedListBuilder(config: PagedList.Config):
+            LivePagedListBuilder<String, RedditPost> {
+
+        val dataSourceFactory = object : DataSource.Factory<String, RedditPost>() {
+            override fun create(): DataSource<String, RedditPost> {
+                dataSource = RedditNewsDataSource(viewModelScope, getTopNewsUseCase)
+                newsDataSourceLiveData.postValue(dataSource)
+                return dataSource
+            }
+        }
+        return LivePagedListBuilder(dataSourceFactory, config)
+    }
+
+    fun openNewsDetails(it: String) {
         TODO("Not yet implemented")
     }
 
     fun refresh() {
-        list.value = null
-
-        uiScope.launch {
-            val result = withContext(Dispatchers.IO) {
-                getTopNewsUseCase.getTopNews(LIST_SIZE)
-            }
-            list.value = result
-        }
-    }
-
-    fun loadData() {
-        uiScope.launch {
-            val result = withContext(Dispatchers.IO) {
-                getTopNewsUseCase.getTopNews(LIST_SIZE)
-            }
-            list.value = result
-        }
+        dataSource.invalidate()
     }
 
     companion object {
-        const val LIST_SIZE: Int = 20
+        const val LIST_SIZE: Int = 30
     }
 
 }

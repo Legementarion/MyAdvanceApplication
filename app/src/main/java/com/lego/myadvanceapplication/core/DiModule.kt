@@ -2,9 +2,9 @@ package com.lego.myadvanceapplication.core
 
 import androidx.room.Room
 import com.lego.myadvanceapplication.core.notification.NotificationController
-import com.lego.myadvanceapplication.data.RedditLocalDataSourceImpl
-import com.lego.myadvanceapplication.data.RedditRemoteDataSourceImpl
+import com.lego.myadvanceapplication.data.*
 import com.lego.myadvanceapplication.data.local.AppDatabase
+import com.lego.myadvanceapplication.data.local.RedditDao
 import com.lego.myadvanceapplication.data.remote.RedditApiInitializer
 import com.lego.myadvanceapplication.domain.news.repository.RedditRepository
 import com.lego.myadvanceapplication.domain.news.repository.RedditRepositoryImpl
@@ -26,13 +26,15 @@ private val networkModule = module {
 }
 
 private val databaseModule = module {
-    single { RedditLocalDataSourceImpl(get()) }
-    single {
+    single<RedditLocalDataSource> { RedditLocalDataSourceImpl(get()) }
+    single<RedditDao> {
         Room.databaseBuilder(
             androidContext(),
-            AppDatabase::class.java, "reddit_news_database"
+            AppDatabase::class.java, "app_database"
         ).build().redditDao()
     }
+    single<RedditRemoteDataSource> { RedditRemoteDataSourceImpl(get()) }
+    single<RedditApi> { RedditApi.getRetrofitInstance().create(RedditApi::class.java) }
 }
 
 private val domainModule = module {

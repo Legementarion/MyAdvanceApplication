@@ -2,8 +2,8 @@ package com.lego.myadvanceapplication.ui.news.list
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
 import android.view.View
+import androidx.lifecycle.Observer
 import com.lego.myadvanceapplication.R
 import kotlinx.android.synthetic.main.activity_reddit_news_list.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -25,14 +25,41 @@ class RedditNewsListActivity : AppCompatActivity() {
             viewModel.refresh()
         }
 
-        viewModel.loadData()
+        viewModel.getState().observe(this, Observer {
+            when (it) {
+                RedditNewsDataSource.State.LOADING -> {
+                    showLoadingState()
+                }
+                RedditNewsDataSource.State.DONE -> {
+                    hideLoadingState()
+                }
+                else -> {
+                    showEmptyState()
+                }
+            }
+        })
 
+        viewModel.getPosts().observe(this, Observer {
+            adapter.submitList(it)
+        })
 
-        Handler().postDelayed({
-            progressBar.visibility = View.GONE
-            emptyViewGroup.visibility = View.VISIBLE
-            feedRv.visibility = View.GONE
-        }, 1200)
+    }
 
+    private fun showLoadingState() {
+        progressBar.visibility = View.VISIBLE
+        emptyViewGroup.visibility = View.GONE
+        feedRv.visibility = View.GONE
+    }
+
+    private fun hideLoadingState() {
+        progressBar.visibility = View.GONE
+        emptyViewGroup.visibility = View.GONE
+        feedRv.visibility = View.VISIBLE
+    }
+
+    private fun showEmptyState() {
+        progressBar.visibility = View.GONE
+        emptyViewGroup.visibility = View.VISIBLE
+        feedRv.visibility = View.GONE
     }
 }
