@@ -20,7 +20,7 @@ class RedditNewsDataSource(
     }
 
     private fun getJobErrorHandler() = CoroutineExceptionHandler { _, e ->
-        updateState(State.ERROR)
+        updateState(State.ERROR)  // todo add error/empty state handling
         Timber.e(RedditNewsDataSource::class.java.simpleName, "An error happened: $e")
     }
 
