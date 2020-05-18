@@ -20,7 +20,8 @@ object RedditMapper {
                     it.post.created,
                     it.post.thumbnail,
                     it.post.url,
-                    it.post.permalink
+                    it.post.permalink,
+                    it.post.isVideo
                 )
             )
         }

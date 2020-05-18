@@ -47,11 +47,14 @@ class RedditNewsListAdapter(
             post: RedditPost,
             clickListener: (id: String) -> Unit
         ) {
+            //todo video
             with(containerView) {
                 tvCaption.text = post.title
                 tvChannelName.text = post.subreddit
+                //todo format 44k instead 44987, samee for likes
                 tvCommentsNumber.text = post.numComments.toString()
-//                tvLikeCount.text = post todo
+                tvLikeCount.text = post.score.toString()
+                // todo gif
                 ivNewCover.loadImage(post.thumbnail)
                 setOnClickListener {
                     clickListener(post.id)

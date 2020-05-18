@@ -78,9 +78,9 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
+            android:text="comments:"
             app:layout_constraintStart_toEndOf="@+id/dislikeBtn"
-            app:layout_constraintTop_toTopOf="@+id/dislikeBtn"
-            tools:text="comments" />
+            app:layout_constraintTop_toTopOf="@+id/dislikeBtn" />
 
         <TextView
             android:id="@+id/tvCommentsNumber"

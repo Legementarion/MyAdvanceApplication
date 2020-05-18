@@ -41,7 +41,7 @@ class RedditNewsViewModel(private val getTopNewsUseCase: GetTopNewsUseCase) : Vi
     }
 
     fun openNewsDetails(it: String) {
-        TODO("Not yet implemented")
+        TODO("Not yet implemented") //open in webview
     }
 
     fun refresh() {

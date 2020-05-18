@@ -16,5 +16,6 @@ data class RedditPost(
     val created: Long,
     val thumbnail: String,
     val url: String,
-    val permalink: String
+    val permalink: String,
+    val isVideo: Boolean
 )

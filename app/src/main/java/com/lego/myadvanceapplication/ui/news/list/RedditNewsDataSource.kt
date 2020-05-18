@@ -70,7 +70,7 @@ class RedditNewsDataSource(
     }
 
     enum class State {
-        DONE, LOADING, ERROR
+        DONE, LOADING, ERROR, EMPTY
     }
 
 }
