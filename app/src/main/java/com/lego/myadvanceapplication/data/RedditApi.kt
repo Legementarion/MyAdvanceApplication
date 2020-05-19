@@ -45,7 +45,7 @@ interface RedditApi {
         }
 
 
-        private const val BASE_URL = "https://www.reddit.com/"
+        const val BASE_URL = "https://www.reddit.com"
     }
 
 }
