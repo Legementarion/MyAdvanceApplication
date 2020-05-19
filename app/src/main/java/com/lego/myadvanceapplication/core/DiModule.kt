@@ -22,19 +22,19 @@ private val viewModule = module {
 
 private val networkModule = module {
     single { RedditRemoteDataSourceImpl(get()) }
-    single { RedditApiInitializer.getRedditApi() }
+    single<RedditApi> { RedditApi.getRetrofitInstance().create(RedditApi::class.java) }
+    single { RedditApiInitializer.getRedditApi() } // todo check this way
 }
 
 private val databaseModule = module {
     single<RedditLocalDataSource> { RedditLocalDataSourceImpl(get()) }
-    single<RedditDao> {
+    single {
         Room.databaseBuilder(
             androidContext(),
             AppDatabase::class.java, "app_database"
         ).build().redditDao()
     }
     single<RedditRemoteDataSource> { RedditRemoteDataSourceImpl(get()) }
-    single<RedditApi> { RedditApi.getRetrofitInstance().create(RedditApi::class.java) }
 }
 
 private val domainModule = module {

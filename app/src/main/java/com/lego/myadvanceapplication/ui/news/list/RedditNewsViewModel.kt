@@ -40,10 +40,6 @@ class RedditNewsViewModel(private val getTopNewsUseCase: GetTopNewsUseCase) : Vi
         return LivePagedListBuilder(dataSourceFactory, config)
     }
 
-    fun openNewsDetails(it: String) {
-        TODO("Not yet implemented") //open in details
-    }
-
     fun refresh() {
         dataSource.invalidate()
     }

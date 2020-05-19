@@ -3,14 +3,16 @@ package com.lego.myadvanceapplication.ui.news.list
 import android.app.PendingIntent
 import android.content.Intent
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import com.lego.myadvanceapplication.R
 import com.lego.myadvanceapplication.ui.CustomTabHelper
+import com.lego.myadvanceapplication.ui.news.details.RedditDetailsActivity
+import com.lego.myadvanceapplication.ui.news.details.RedditDetailsActivity.Companion.EXTRA_IMG_DETAILS
 import kotlinx.android.synthetic.main.activity_reddit_news_list.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -25,7 +27,9 @@ class RedditNewsListActivity : AppCompatActivity() {
         val adapter = RedditNewsListAdapter({
             openUrl(it)
         }, {
-            viewModel.openNewsDetails(it)  // todo drawable ?
+            val intent = Intent(baseContext, RedditDetailsActivity::class.java)
+            intent.putExtra(EXTRA_IMG_DETAILS, it)
+            startActivity(intent) // todo drawable ?
         })
         feedRv.adapter = adapter
 
