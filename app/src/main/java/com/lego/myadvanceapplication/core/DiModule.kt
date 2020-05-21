@@ -4,7 +4,6 @@ import androidx.room.Room
 import com.lego.myadvanceapplication.core.notification.NotificationController
 import com.lego.myadvanceapplication.data.*
 import com.lego.myadvanceapplication.data.local.AppDatabase
-import com.lego.myadvanceapplication.data.remote.RedditApiInitializer
 import com.lego.myadvanceapplication.domain.news.repository.RedditRepository
 import com.lego.myadvanceapplication.domain.news.repository.RedditRepositoryImpl
 import com.lego.myadvanceapplication.domain.news.usecase.GetFavoriteNewsUseCase
@@ -25,7 +24,7 @@ private val viewModule = module {
 private val networkModule = module {
     single { RedditRemoteDataSourceImpl(get()) }
     single<RedditApi> { RedditApi.getRetrofitInstance().create(RedditApi::class.java) }
-    single { RedditApiInitializer.getRedditApi() } // todo check this way
+//    single { RedditApiInitializer.getRedditApi() } // todo check this way
 }
 
 private val databaseModule = module {
@@ -41,10 +40,10 @@ private val databaseModule = module {
 
 private val domainModule = module {
     single<RedditRepository> { RedditRepositoryImpl(get(), get()) }
-    single { GetTopNewsUseCase(get()) }
-    single { GetHotNewsUseCase(get()) }
-    single { GetNewNewsUseCase(get()) }
-    single { GetFavoriteNewsUseCase(get()) }
+    factory { GetTopNewsUseCase(get()) }
+    factory { GetHotNewsUseCase(get()) }
+    factory { GetNewNewsUseCase(get()) }
+    factory { GetFavoriteNewsUseCase(get()) }
 }
 
 private val coreModule = module {

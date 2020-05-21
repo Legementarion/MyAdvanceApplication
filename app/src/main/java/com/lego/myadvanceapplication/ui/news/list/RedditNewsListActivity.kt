@@ -21,6 +21,7 @@ class RedditNewsListActivity : AppCompatActivity() {
 
         val pagerAdapter = MyFragmentPagerAdapter(supportFragmentManager)
         viewPager.adapter = pagerAdapter
+        viewPager.offscreenPageLimit = PAGE_COUNT
 
         viewPager.addOnPageChangeListener(object : OnPageChangeListener {
             override fun onPageSelected(position: Int) {
@@ -58,7 +59,6 @@ class RedditNewsListActivity : AppCompatActivity() {
                 Page.NEW.pos -> RedditNewsListFragment.newInstance(Page.NEW)
                 else -> RedditNewsListFragment.newInstance(Page.FAVORITE)
             }
-
         }
 
         override fun getCount(): Int {

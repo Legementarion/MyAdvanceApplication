@@ -19,14 +19,14 @@ interface RedditApi {
     ): NewsResponse
 
     @GET("/hot.json")
-    fun getHotNews(
+    suspend fun getHotNews(
         @Query("limit") limit: Int,
         @Query("after") after: String? = null,
         @Query("before") before: String? = null
     ): NewsResponse
 
     @GET("/new.json")
-    fun getNewNews(
+    suspend fun getNewNews(
         @Query("limit") limit: Int,
         @Query("after") after: String? = null,
         @Query("before") before: String? = null
@@ -41,7 +41,7 @@ interface RedditApi {
         fun getRetrofitInstance(): Retrofit {
             if (retrofit == null) {
                 val logging = HttpLoggingInterceptor()
-                logging.level = HttpLoggingInterceptor.Level.BODY
+                logging.level = HttpLoggingInterceptor.Level.HEADERS
                 val httpClient = OkHttpClient.Builder()
                 httpClient.addInterceptor(logging)
 

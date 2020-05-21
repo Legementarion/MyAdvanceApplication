@@ -10,6 +10,7 @@ import com.lego.myadvanceapplication.domain.news.usecase.GetNewNewsUseCase
 import com.lego.myadvanceapplication.domain.news.usecase.GetTopNewsUseCase
 import kotlinx.coroutines.*
 import timber.log.Timber
+import java.lang.Exception
 
 class RedditNewsDataSource(
     private val scope: CoroutineScope,
@@ -28,7 +29,7 @@ class RedditNewsDataSource(
     }
 
     private fun getJobErrorHandler() = CoroutineExceptionHandler { _, e ->
-        updateState(State.ERROR)  // todo add error/empty state handling
+        updateState(State.ERROR)  // todo check error/empty state handling
         Timber.e(RedditNewsDataSource::class.java.simpleName, "An error happened: $e")
     }
 
@@ -41,12 +42,16 @@ class RedditNewsDataSource(
             val result = withContext(Dispatchers.IO) {
                 loadNewsFor(limit = params.requestedLoadSize)
             }
-            if (result.isEmpty()) {
-                updateState(State.EMPTY)
-            } else {
-                updateState(State.DONE)
-                callback.onResult(result.posts, result.before, result.after)
-            }
+            result?.let {
+                if (result.isEmpty()) {
+                    updateState(State.EMPTY)
+                } else {
+                    updateState(State.DONE)
+                    callback.onResult(result.posts, result.before, result.after)
+                }
+            } : run {
+            updateState(State.ERROR)
+        }
         }
     }
 
@@ -56,8 +61,12 @@ class RedditNewsDataSource(
             val result = withContext(Dispatchers.IO) {
                 loadNewsFor(limit = params.requestedLoadSize, after = params.key)
             }
-            updateState(State.DONE)
-            callback.onResult(result.posts, result.after)
+            result?.let {
+                updateState(State.DONE)
+                callback.onResult(result.posts, result.after)
+            } : run {
+            updateState(State.ERROR)
+        }
         }
     }
 
@@ -70,8 +79,12 @@ class RedditNewsDataSource(
             val result = withContext(Dispatchers.IO) {
                 loadNewsFor(limit = params.requestedLoadSize, before = params.key)
             }
-            updateState(State.DONE)
-            callback.onResult(result.posts, result.before)
+            result?.let {
+                updateState(State.DONE)
+                callback.onResult(result.posts, result.before)
+            } : run {
+            updateState(State.ERROR)
+        }
         }
 
     }
@@ -85,23 +98,31 @@ class RedditNewsDataSource(
         limit: Int,
         after: String? = null,
         before: String? = null
-    ): RedditData {
+    ): RedditData? {
 
-        return when (pageType) {
-            Page.HOT -> {
-                getHotNewsUseCase.getHotNews(limit = limit, after = after, before = before)
+        try {
+            return when (pageType) {
+                Page.HOT -> {
+                    getHotNewsUseCase.getHotNews(limit = limit, after = after, before = before)
+                }
+                Page.TOP -> {
+                    getTopNewsUseCase.getTopNews(limit = limit, after = after, before = before)
+                }
+                Page.NEW -> {
+                    getNewNewsUseCase.getNewNews(limit = limit, after = after, before = before)
+                }
+                Page.FAVORITE -> {
+                    getFavorNewsUseCase.getFavoriteNews(
+                        limit = limit,
+                        after = after,
+                        before = before
+                    )
+                }
             }
-            Page.TOP -> {
-                getTopNewsUseCase.getTopNews(limit = limit, after = after, before = before)
-            }
-            Page.NEW -> {
-                getNewNewsUseCase.getNewNews(limit = limit, after = after, before = before)
-            }
-            Page.FAVORITE -> {
-                getFavorNewsUseCase.getFavoriteNews(limit = limit, after = after, before = before)
-            }
+        } catch (e: Exception) {
+            Timber.e(RedditNewsDataSource::class.java.simpleName, "An error happened: $e")
         }
-
+        return null
     }
 
     enum class State {
