@@ -50,6 +50,10 @@ class RedditNewsListFragment : Fragment() {
         val adapter = RedditNewsListAdapter({
             openUrl(it)
         }, {
+            viewModel.like(it)
+        }, {
+            viewModel.dislike(it)
+        }, {
             val intent = Intent(context, RedditDetailsActivity::class.java)
             intent.putExtra(RedditDetailsActivity.EXTRA_IMG_DETAILS, it)
             startActivity(intent) // todo drawable ?
@@ -57,7 +61,7 @@ class RedditNewsListFragment : Fragment() {
         feedRv.adapter = adapter
 
         swipe.setOnRefreshListener {
-            viewModel.refresh()  // todo in more correct way
+            viewModel.refresh()
         }
 
         viewModel.getState().observe(viewLifecycleOwner, Observer {
@@ -90,6 +94,7 @@ class RedditNewsListFragment : Fragment() {
         progressBar.visibility = View.GONE
         emptyViewGroup.visibility = View.GONE
         feedRv.visibility = View.VISIBLE
+        swipe.isRefreshing = false
     }
 
     private fun showEmptyState() {

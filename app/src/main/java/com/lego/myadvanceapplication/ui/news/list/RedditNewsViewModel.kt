@@ -57,11 +57,19 @@ class RedditNewsViewModel(
     }
 
     fun refresh() {
-        dataSource.invalidate()
+        dataSource.refreshData()
     }
 
     fun setPageType(page: Page) {
         pageType = page
+    }
+
+    fun like(id: String) {
+        TODO("Not yet implemented")
+    }
+
+    fun dislike(id: String) {
+        TODO("Not yet implemented")
     }
 
     companion object {

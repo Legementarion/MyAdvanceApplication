@@ -49,9 +49,7 @@ class RedditNewsDataSource(
                     updateState(State.DONE)
                     callback.onResult(result.posts, result.before, result.after)
                 }
-            } : run {
-            updateState(State.ERROR)
-        }
+            } ?: run { updateState(State.ERROR) }
         }
     }
 
@@ -64,9 +62,9 @@ class RedditNewsDataSource(
             result?.let {
                 updateState(State.DONE)
                 callback.onResult(result.posts, result.after)
-            } : run {
-            updateState(State.ERROR)
-        }
+            } ?: run {
+                updateState(State.ERROR)
+            }
         }
     }
 
@@ -82,9 +80,9 @@ class RedditNewsDataSource(
             result?.let {
                 updateState(State.DONE)
                 callback.onResult(result.posts, result.before)
-            } : run {
-            updateState(State.ERROR)
-        }
+            } ?: run {
+                updateState(State.ERROR)
+            }
         }
 
     }
@@ -92,6 +90,10 @@ class RedditNewsDataSource(
     override fun invalidate() {
         super.invalidate()
         scope.cancel()
+    }
+
+    fun refreshData() {  //dirty hack to avoid coroutine dispatcher canceletion
+        super.invalidate()
     }
 
     private suspend fun loadNewsFor(

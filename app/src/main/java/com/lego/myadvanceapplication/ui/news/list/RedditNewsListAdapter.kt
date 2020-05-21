@@ -15,6 +15,8 @@ import kotlinx.android.synthetic.main.news_list_item.view.*
 
 class RedditNewsListAdapter(
     private val clickListener: (id: String) -> Unit,
+    private val likeListener: (id: String) -> Unit,
+    private val dislikeListener: (id: String) -> Unit,
     private val imageClickListener: (id: String) -> Unit
 ) : PagedListAdapter<RedditPost, RedditNewsListAdapter.NewsViewHolder>(DIFF_CALLBACK) {
 
