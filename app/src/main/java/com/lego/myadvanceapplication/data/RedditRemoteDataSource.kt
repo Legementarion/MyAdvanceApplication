@@ -10,4 +10,6 @@ interface RedditRemoteDataSource {
 
     suspend fun getNewNews(limit: Int, after: String?, before: String?): NewsResponse
 
+    suspend fun vote(id: Int, dir: Int)
+
 }

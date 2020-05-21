@@ -26,4 +26,7 @@ class RedditRepositoryImpl(
         return RedditData(null, null, emptyList()) //todo implement
     }
 
+    override suspend fun vote(id: Int, dir: Int) {
+        remoteSource.vote(id, dir)
+    }
 }

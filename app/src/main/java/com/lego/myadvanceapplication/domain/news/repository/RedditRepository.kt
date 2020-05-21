@@ -12,4 +12,6 @@ interface RedditRepository {
 
     suspend fun getFavoriteNews(limit: Int, after: String?, before: String?): RedditData
 
+    suspend fun vote(id: Int, dir: Int)
+
 }

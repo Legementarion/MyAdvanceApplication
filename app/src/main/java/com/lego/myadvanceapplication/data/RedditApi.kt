@@ -32,6 +32,12 @@ interface RedditApi {
         @Query("before") before: String? = null
     ): NewsResponse
 
+    @POST("/api/vote")
+    suspend fun vote(
+        @Query("id") id: Int,
+        @Query("dir") dir: Int
+    )
+
     @POST
     fun authorize()
 

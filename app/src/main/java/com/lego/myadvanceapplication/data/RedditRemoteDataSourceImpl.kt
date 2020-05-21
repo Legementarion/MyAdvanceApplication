@@ -15,4 +15,8 @@ class RedditRemoteDataSourceImpl(private val api: RedditApi) : RedditRemoteDataS
     override suspend fun getNewNews(limit: Int, after: String?, before: String?): NewsResponse {
         return api.getNewNews(limit, after, before)
     }
+
+    override suspend fun vote(id: Int, dir: Int) {
+        api.vote(id, dir)
+    }
 }
