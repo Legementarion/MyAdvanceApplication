@@ -58,7 +58,6 @@ class RedditNewsListAdapter(
                 tvCommentsNumber.text = post.numComments.toString()
                 tvLikeCount.text = post.score.toString()
                 // todo gif
-                post
                 ivNewCover.loadImage(post.thumbnail)
                 ivNewCover.setOnClickListener { imageClickListener(post.thumbnail) }
                 setOnClickListener {

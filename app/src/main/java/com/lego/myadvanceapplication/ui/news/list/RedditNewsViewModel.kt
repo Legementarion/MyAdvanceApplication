@@ -5,12 +5,21 @@ import androidx.paging.DataSource
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import com.lego.myadvanceapplication.domain.news.model.RedditPost
+import com.lego.myadvanceapplication.domain.news.usecase.GetFavoriteNewsUseCase
+import com.lego.myadvanceapplication.domain.news.usecase.GetHotNewsUseCase
+import com.lego.myadvanceapplication.domain.news.usecase.GetNewNewsUseCase
 import com.lego.myadvanceapplication.domain.news.usecase.GetTopNewsUseCase
 
-class RedditNewsViewModel(private val getTopNewsUseCase: GetTopNewsUseCase) : ViewModel() {
+class RedditNewsViewModel(
+    private val getHotNewsUseCase: GetHotNewsUseCase,
+    private val getTopNewsUseCase: GetTopNewsUseCase,
+    private val getNewNewsUseCase: GetNewNewsUseCase,
+    private val getFavoriteNewsUseCase: GetFavoriteNewsUseCase
+) : ViewModel() {
 
     private lateinit var dataSource: RedditNewsDataSource
     private var postsLiveData: LiveData<PagedList<RedditPost>>
+    private lateinit var pageType: Page
     val newsDataSourceLiveData = MutableLiveData<RedditNewsDataSource>()
 
     fun getState(): LiveData<RedditNewsDataSource.State> =
@@ -32,7 +41,14 @@ class RedditNewsViewModel(private val getTopNewsUseCase: GetTopNewsUseCase) : Vi
 
         val dataSourceFactory = object : DataSource.Factory<String, RedditPost>() {
             override fun create(): DataSource<String, RedditPost> {
-                dataSource = RedditNewsDataSource(viewModelScope, getTopNewsUseCase)
+                dataSource = RedditNewsDataSource(
+                    viewModelScope,
+                    getHotNewsUseCase,
+                    getTopNewsUseCase,
+                    getNewNewsUseCase,
+                    getFavoriteNewsUseCase,
+                    pageType
+                )
                 newsDataSourceLiveData.postValue(dataSource)
                 return dataSource
             }
@@ -42,6 +58,10 @@ class RedditNewsViewModel(private val getTopNewsUseCase: GetTopNewsUseCase) : Vi
 
     fun refresh() {
         dataSource.invalidate()
+    }
+
+    fun setPageType(page: Page) {
+        pageType = page
     }
 
     companion object {

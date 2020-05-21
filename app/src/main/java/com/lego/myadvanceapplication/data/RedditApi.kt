@@ -18,8 +18,19 @@ interface RedditApi {
         @Query("before") before: String? = null
     ): NewsResponse
 
-    @POST
-    fun getHotNews()
+    @GET("/hot.json")
+    fun getHotNews(
+        @Query("limit") limit: Int,
+        @Query("after") after: String? = null,
+        @Query("before") before: String? = null
+    ): NewsResponse
+
+    @GET("/new.json")
+    fun getNewNews(
+        @Query("limit") limit: Int,
+        @Query("after") after: String? = null,
+        @Query("before") before: String? = null
+    ): NewsResponse
 
     @POST
     fun authorize()

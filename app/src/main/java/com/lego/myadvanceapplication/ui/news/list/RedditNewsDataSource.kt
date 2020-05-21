@@ -2,14 +2,22 @@ package com.lego.myadvanceapplication.ui.news.list
 
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.PageKeyedDataSource
+import com.lego.myadvanceapplication.domain.news.model.RedditData
 import com.lego.myadvanceapplication.domain.news.model.RedditPost
+import com.lego.myadvanceapplication.domain.news.usecase.GetFavoriteNewsUseCase
+import com.lego.myadvanceapplication.domain.news.usecase.GetHotNewsUseCase
+import com.lego.myadvanceapplication.domain.news.usecase.GetNewNewsUseCase
 import com.lego.myadvanceapplication.domain.news.usecase.GetTopNewsUseCase
 import kotlinx.coroutines.*
 import timber.log.Timber
 
 class RedditNewsDataSource(
     private val scope: CoroutineScope,
-    private val getTopNewsUseCase: GetTopNewsUseCase
+    private val getHotNewsUseCase: GetHotNewsUseCase,
+    private val getTopNewsUseCase: GetTopNewsUseCase,
+    private val getNewNewsUseCase: GetNewNewsUseCase,
+    private val getFavorNewsUseCase: GetFavoriteNewsUseCase,
+    private val pageType: Page
 ) :
     PageKeyedDataSource<String, RedditPost>() {
 
@@ -31,10 +39,14 @@ class RedditNewsDataSource(
         updateState(State.LOADING)
         scope.launch(getJobErrorHandler()) {
             val result = withContext(Dispatchers.IO) {
-                getTopNewsUseCase.getTopNews(limit = params.requestedLoadSize)
+                loadNewsFor(limit = params.requestedLoadSize)
             }
-            updateState(State.DONE)
-            callback.onResult(result.posts, result.before, result.after)
+            if (result.isEmpty()) {
+                updateState(State.EMPTY)
+            } else {
+                updateState(State.DONE)
+                callback.onResult(result.posts, result.before, result.after)
+            }
         }
     }
 
@@ -42,7 +54,7 @@ class RedditNewsDataSource(
         updateState(State.LOADING)
         scope.launch {
             val result = withContext(Dispatchers.IO) {
-                getTopNewsUseCase.getTopNews(limit = params.requestedLoadSize, after = params.key)
+                loadNewsFor(limit = params.requestedLoadSize, after = params.key)
             }
             updateState(State.DONE)
             callback.onResult(result.posts, result.after)
@@ -56,7 +68,7 @@ class RedditNewsDataSource(
         updateState(State.LOADING)
         scope.launch {
             val result = withContext(Dispatchers.IO) {
-                getTopNewsUseCase.getTopNews(limit = params.requestedLoadSize, before = params.key)
+                loadNewsFor(limit = params.requestedLoadSize, before = params.key)
             }
             updateState(State.DONE)
             callback.onResult(result.posts, result.before)
@@ -67,6 +79,29 @@ class RedditNewsDataSource(
     override fun invalidate() {
         super.invalidate()
         scope.cancel()
+    }
+
+    private suspend fun loadNewsFor(
+        limit: Int,
+        after: String? = null,
+        before: String? = null
+    ): RedditData {
+
+        return when (pageType) {
+            Page.HOT -> {
+                getHotNewsUseCase.getHotNews(limit = limit, after = after, before = before)
+            }
+            Page.TOP -> {
+                getTopNewsUseCase.getTopNews(limit = limit, after = after, before = before)
+            }
+            Page.NEW -> {
+                getNewNewsUseCase.getNewNews(limit = limit, after = after, before = before)
+            }
+            Page.FAVORITE -> {
+                getFavorNewsUseCase.getFavoriteNews(limit = limit, after = after, before = before)
+            }
+        }
+
     }
 
     enum class State {

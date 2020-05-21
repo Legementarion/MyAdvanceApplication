@@ -4,7 +4,11 @@ data class RedditData(
     val before: String?,
     val after: String?,
     val posts: List<RedditPost>
-)
+) {
+    fun isEmpty(): Boolean {
+        return before == null && after == null && posts.isEmpty()
+    }
+}
 
 data class RedditPost(
     val id: String = "",
