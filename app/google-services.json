@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "655826375146",
+    "firebase_url": "https://myadvanceapp.firebaseio.com",
+    "project_id": "myadvanceapp",
+    "storage_bucket": "myadvanceapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:655826375146:android:18981976772dc66a37a293",
+        "android_client_info": {
+          "package_name": "com.lego.myadvanceapplication"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "655826375146-envg94sq3ot7celg5jm00m4nh2d9vchp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.lego.myadvanceapplication",
+            "certificate_hash": "1ecbee0c9f6cb6b69a6dcf2bd9cd7161bfeea9f2"
+          }
+        },
+        {
+          "client_id": "655826375146-g18ehm93s3i692sss9pcecd2b5og6t61.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCHx_nZtPTW5oRJ19T8WbYlvmNWYUTwnDI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "655826375146-g18ehm93s3i692sss9pcecd2b5og6t61.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

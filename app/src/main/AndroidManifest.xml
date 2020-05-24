@@ -26,6 +26,8 @@
 
         <activity android:name=".ui.news.details.RedditDetailsActivity" />
 
+        <activity android:name=".ui.SignInActivity" />
+
         <activity android:name=".ui.chat.ChatPushActivity" />
 
         <!--
