@@ -1,38 +1,35 @@
-package com.lego.myadvanceapplication.ui
+package com.lego.myadvanceapplication.ui.signin
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.lego.myadvanceapplication.R
+import com.lego.myadvanceapplication.ui.utils.showErrorOrLog
 import kotlinx.android.synthetic.main.activity_sign_in.*
-
+import timber.log.Timber
 
 class SignInActivity : AppCompatActivity() {
 
-    private val TAG = "SignInActivity"
-    private val RC_SIGN_IN = 9001
+    companion object {
+        private const val RC_SIGN_IN = 9001
+    }
 
-    private var mGoogleSignInClient: GoogleSignInClient? = null
-
-    // Firebase instance variables
     private var mFirebaseAuth: FirebaseAuth? = null
+    private var mGoogleSignInClient: GoogleSignInClient? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_in)
 
-        // Set click listeners
         signInBtn.setOnClickListener {
             signIn()
         }
@@ -45,7 +42,6 @@ class SignInActivity : AppCompatActivity() {
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
 
-        // Initialize FirebaseAuth
         mFirebaseAuth = FirebaseAuth.getInstance()
     }
 
@@ -55,39 +51,12 @@ class SignInActivity : AppCompatActivity() {
         updateUI(account)
     }
 
-    fun onConnectionFailed(connectionResult: ConnectionResult) {
-        // An unresolvable error has occurred and Google APIs (including Sign-In) will not
-        // be available.
-        Log.d(TAG, "onConnectionFailed:$connectionResult")
-        Toast.makeText(this, "Google Play Services error.", Toast.LENGTH_SHORT).show()
-    }
-
-//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-//        super.onActivityResult(requestCode, resultCode, data)
-//
-//        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
-//        if (requestCode == RC_SIGN_IN) {
-//            val result: GoogleSignInResult? = Auth.GoogleSignInApi.getSignInResultFromIntent(data)
-//            result?.let {
-//                if (result.isSuccess) {
-//                    // Google Sign-In was successful, authenticate with Firebase
-//                    result.signInAccount?.let { account -> firebaseAuthWithGoogle(account) }
-//                } else {
-//                    // Google Sign-In failed
-//                    Log.e(TAG, "Google Sign-In failed.")
-//                }
-//            }
-//
-//        }
-//    }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
         // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
-            // The Task returned from this call is always completed, no need to attach
-            // a listener.
+            // The Task returned from this call is always completed, no need to attach a listener.
             val task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(data)
             handleSignInResult(task)
         }
@@ -102,7 +71,7 @@ class SignInActivity : AppCompatActivity() {
         } catch (e: ApiException) {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
-            Log.w(TAG, "signInResult:failed code=" + e.statusCode)
+            Timber.d("signInResult:failed code=${e.statusCode}")
             updateUI(null)
         }
     }
@@ -110,28 +79,23 @@ class SignInActivity : AppCompatActivity() {
     private fun updateUI(account: GoogleSignInAccount?) {
         if (account != null) {
             firebaseAuthWithGoogle(account)
-        } else
-            Log.w(TAG, "signInResult:failed")
+        } else {
+            showErrorOrLog(
+                findViewById(
+                    android.R.id.content
+                ), "signInResult:failed", true
+            )
+        }
     }
 
     private fun firebaseAuthWithGoogle(acct: GoogleSignInAccount) {
-        Log.d(TAG, "firebaseAuthWithGooogle:" + acct.id)
+        Timber.d("firebaseAuthWithGoogle:${acct.id}")
         val credential = GoogleAuthProvider.getCredential(acct.idToken, null)
         mFirebaseAuth?.signInWithCredential(credential)?.addOnCompleteListener(this) { task ->
-            Log.d(
-                TAG,
-                "signInWithCredential:onComplete:" + task.isSuccessful
-            )
+            Timber.d("signInWithCredential:onComplete:${task.isSuccessful}")
 
-            // If sign in fails, display a message to the user. If sign in succeeds
-            // the auth state listener will be notified and logic to handle the
-            // signed in user can be handled in the listener.
             if (!task.isSuccessful) {
-                Log.w(
-                    TAG,
-                    "signInWithCredential",
-                    task.exception
-                )
+                Timber.e(task.exception, "signInWithCredential")
                 Toast.makeText(
                     this@SignInActivity, "Authentication failed.",
                     Toast.LENGTH_SHORT
@@ -144,6 +108,9 @@ class SignInActivity : AppCompatActivity() {
 
     private fun signIn() {
         val signInIntent: Intent? = mGoogleSignInClient?.signInIntent
-        startActivityForResult(signInIntent, RC_SIGN_IN)
+        startActivityForResult(
+            signInIntent,
+            RC_SIGN_IN
+        )
     }
 }

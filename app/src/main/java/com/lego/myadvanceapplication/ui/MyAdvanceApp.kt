@@ -7,11 +7,8 @@ import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES
 import androidx.preference.PreferenceManager
 import com.lego.myadvanceapplication.R
 import com.lego.myadvanceapplication.core.baseModule
-import com.lego.myadvanceapplication.ui.main.BasicMainViewModel
 import org.koin.android.ext.koin.androidContext
-import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
-import org.koin.dsl.module
 
 class MyAdvanceApp : Application() {
 

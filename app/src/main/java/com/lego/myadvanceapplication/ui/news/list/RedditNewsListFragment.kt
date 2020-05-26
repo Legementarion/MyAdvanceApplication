@@ -12,8 +12,8 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.lego.myadvanceapplication.R
-import com.lego.myadvanceapplication.ui.CustomTabHelper
 import com.lego.myadvanceapplication.ui.news.details.RedditDetailsActivity
+import com.lego.myadvanceapplication.ui.utils.CustomTabHelper
 import kotlinx.android.synthetic.main.reddit_news_list_fragment.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 

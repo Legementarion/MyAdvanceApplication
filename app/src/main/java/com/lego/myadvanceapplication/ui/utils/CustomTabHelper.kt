@@ -1,4 +1,4 @@
-package com.lego.myadvanceapplication.ui
+package com.lego.myadvanceapplication.ui.utils
 
 import android.content.Context
 import android.content.Intent
@@ -54,8 +54,10 @@ class CustomTabHelper {
                 sPackageNameToUse = defaultViewHandlerPackageName
             packagesSupportingCustomTabs.contains(STABLE_PACKAGE) -> sPackageNameToUse =
                 STABLE_PACKAGE
-            packagesSupportingCustomTabs.contains(BETA_PACKAGE) -> sPackageNameToUse = BETA_PACKAGE
-            packagesSupportingCustomTabs.contains(DEV_PACKAGE) -> sPackageNameToUse = DEV_PACKAGE
+            packagesSupportingCustomTabs.contains(BETA_PACKAGE) -> sPackageNameToUse =
+                BETA_PACKAGE
+            packagesSupportingCustomTabs.contains(DEV_PACKAGE) -> sPackageNameToUse =
+                DEV_PACKAGE
             packagesSupportingCustomTabs.contains(LOCAL_PACKAGE) -> sPackageNameToUse =
                 LOCAL_PACKAGE
         }

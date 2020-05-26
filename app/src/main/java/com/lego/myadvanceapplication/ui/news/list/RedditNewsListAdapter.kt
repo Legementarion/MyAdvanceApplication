@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.lego.myadvanceapplication.R
 import com.lego.myadvanceapplication.data.RedditApi.Companion.BASE_URL
 import com.lego.myadvanceapplication.domain.news.model.RedditPost
-import com.lego.myadvanceapplication.ui.loadImage
+import com.lego.myadvanceapplication.ui.utils.loadImage
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.news_list_item.view.*
 

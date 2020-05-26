@@ -19,7 +19,7 @@ class RedditNewsListActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_reddit_news_list)
 
-        val pagerAdapter = MyFragmentPagerAdapter(supportFragmentManager)
+        val pagerAdapter = RedditPagerAdapter(supportFragmentManager)
         viewPager.adapter = pagerAdapter
         viewPager.offscreenPageLimit = PAGE_COUNT
 
@@ -50,7 +50,7 @@ class RedditNewsListActivity : AppCompatActivity() {
         }
     }
 
-    private class MyFragmentPagerAdapter(fm: FragmentManager) :
+    private class RedditPagerAdapter(fm: FragmentManager) :
         FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
         override fun getItem(position: Int): Fragment {
             return when (position) {

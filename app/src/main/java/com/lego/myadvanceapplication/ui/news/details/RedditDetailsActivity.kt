@@ -3,7 +3,7 @@ package com.lego.myadvanceapplication.ui.news.details
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.lego.myadvanceapplication.R
-import com.lego.myadvanceapplication.ui.loadImage
+import com.lego.myadvanceapplication.ui.utils.loadImage
 import kotlinx.android.synthetic.main.activity_reddit_details.*
 
 class RedditDetailsActivity : AppCompatActivity() {

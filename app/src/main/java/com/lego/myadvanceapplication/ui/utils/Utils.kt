@@ -1,9 +1,12 @@
-package com.lego.myadvanceapplication.ui
+package com.lego.myadvanceapplication.ui.utils
 
 import android.content.Context
+import android.view.View
 import android.widget.ImageView
 import com.bumptech.glide.Glide
+import com.google.android.material.snackbar.Snackbar
 import com.lego.myadvanceapplication.R
+import timber.log.Timber
 
 fun loadImage(url: String, context: Context) =
     Glide
@@ -28,3 +31,11 @@ fun ImageView.loadGif(url: String) =
         .asGif()
         .load(url)
         .into(this)
+
+fun showErrorOrLog(view: View, text: String, showToast: Boolean = false) {
+    Timber.d(text)
+    if (showToast) {
+        Snackbar.make(view, "Hello Android 7", Snackbar.LENGTH_LONG)
+            .show()
+    }
+}
