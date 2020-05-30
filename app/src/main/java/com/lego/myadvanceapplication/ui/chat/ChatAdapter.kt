@@ -4,7 +4,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
@@ -14,6 +13,7 @@ import com.firebase.ui.database.FirebaseRecyclerOptions
 import com.google.firebase.storage.FirebaseStorage
 import com.lego.myadvanceapplication.R
 import com.lego.myadvanceapplication.data.models.Message
+import com.lego.myadvanceapplication.domain.MessageLock
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_chat_message.view.*
 
@@ -44,7 +44,7 @@ class ChatAdapter(options: FirebaseRecyclerOptions<Message>) :
         fun bindData(message: Message) {
             with(containerView) {
                 if (message.message != null) {
-                    messageTextView.text = message.message
+                    messageTextView.text = MessageLock.retrieveMessage(message.message)
                     messageTextView.visibility = TextView.VISIBLE
 //                    messageImageView.visibility = ImageView.GONE
                 } else if (message.imageUrl != null) {

@@ -20,6 +20,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.lego.myadvanceapplication.R
 import com.lego.myadvanceapplication.data.models.Message
+import com.lego.myadvanceapplication.domain.MessageLock
 import kotlinx.android.synthetic.main.chat_fragment.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
@@ -81,7 +82,7 @@ class ChatTodoFragment : Fragment() {
                     "$MESSAGES_CHILD/$username"
                 }
                 else -> {
-                    MESSAGES_CHILD
+                    "$MESSAGES_CHILD/all"
                 }
             }
         }
@@ -115,7 +116,6 @@ class ChatTodoFragment : Fragment() {
             }
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-
                 if (firebaseAdapter.itemCount > 0) {
                     showEmptyState(true)
                 } else {
@@ -149,7 +149,7 @@ class ChatTodoFragment : Fragment() {
         btnSend.setOnClickListener {
             val message = Message(
                 System.currentTimeMillis().toString(),
-                etMessage.text.toString(),
+                MessageLock.encodeMessage(etMessage.text.toString()),
                 username,
                 System.currentTimeMillis().toString(),
                 photoUrl,
