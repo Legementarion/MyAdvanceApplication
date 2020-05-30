@@ -15,8 +15,7 @@ import com.firebase.ui.database.FirebaseRecyclerOptions
 import com.firebase.ui.database.SnapshotParser
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.lego.myadvanceapplication.R
@@ -37,7 +36,6 @@ class ChatTodoFragment : Fragment() {
         private const val MESSAGE_SENT_EVENT = "message_sent"
         private const val MESSAGE_URL = "http://friendlychat.firebase.google.com/message/"
 
-
         private const val CHAT_EXTRA = "CHAT_EXTRA"
 
         fun newInstance(chatType: ChatType): ChatTodoFragment {
@@ -49,7 +47,6 @@ class ChatTodoFragment : Fragment() {
         }
     }
 
-    //    private val viewModel: RedditNewsViewModel by viewModel()
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var firebaseDatabaseReference: DatabaseReference
     private lateinit var firebaseAdapter: ChatAdapter
@@ -60,7 +57,7 @@ class ChatTodoFragment : Fragment() {
 
     private var username: String = ANONYMOUS
     private var photoUrl: String? = null
-
+    private var path = ""
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -76,8 +73,21 @@ class ChatTodoFragment : Fragment() {
         // Initialize Firebase Auth
         firebaseAuth = FirebaseAuth.getInstance()
         firebaseUser = firebaseAuth.currentUser
-
         username = firebaseUser?.displayName ?: ANONYMOUS
+
+        arguments?.getSerializable(CHAT_EXTRA)?.let {
+            path += when (it as ChatType) {
+                ChatType.My -> {
+                    "$MESSAGES_CHILD/$username"
+                }
+                else -> {
+                    MESSAGES_CHILD
+                }
+            }
+        }
+
+        showEmptyState()
+
         firebaseUser?.photoUrl?.let {
             photoUrl = it.toString()
         }
@@ -96,12 +106,25 @@ class ChatTodoFragment : Fragment() {
             }
 
         val messagesRef: DatabaseReference =
-            firebaseDatabaseReference.child(MESSAGES_CHILD)
+            firebaseDatabaseReference.child(path)
         val options: FirebaseRecyclerOptions<Message> = FirebaseRecyclerOptions.Builder<Message>()
             .setQuery(messagesRef, parser)
             .build()
+        messagesRef.database.reference.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onCancelled(dataError: DatabaseError) { // no need
+            }
 
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+
+                if (firebaseAdapter.itemCount > 0) {
+                    showEmptyState(true)
+                } else {
+                    showEmptyState()
+                }
+            }
+        })
         firebaseAdapter = ChatAdapter(options)
+
 
         firebaseAdapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
             override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
@@ -132,7 +155,7 @@ class ChatTodoFragment : Fragment() {
                 photoUrl,
                 null /* no image */
             )
-            firebaseDatabaseReference.child(MESSAGES_CHILD)
+            firebaseDatabaseReference.child(path)
                 .push().setValue(message)
             etMessage.setText("")
         }
@@ -152,7 +175,7 @@ class ChatTodoFragment : Fragment() {
                         photoUrl = photoUrl,
                         imageUrl = LOADING_IMAGE_URL
                     )
-                    firebaseDatabaseReference.child(MESSAGES_CHILD).push()
+                    firebaseDatabaseReference.child(path).push()
                         .setValue(tempMessage) { databaseError, databaseReference ->
                             if (databaseError == null) {
                                 val key = databaseReference.key
@@ -171,6 +194,10 @@ class ChatTodoFragment : Fragment() {
         }
     }
 
+    private fun showEmptyState(visibility: Boolean = false) {
+        tvEmptyState.visibility = if (visibility) View.GONE else View.VISIBLE
+    }
+
     private fun putImageInStorage(
         storageReference: StorageReference,
         uri: Uri,
@@ -184,7 +211,7 @@ class ChatTodoFragment : Fragment() {
                             null, user = username, photoUrl = photoUrl,
                             imageUrl = it.result.toString()
                         )
-                        firebaseDatabaseReference.child(MESSAGES_CHILD)
+                        firebaseDatabaseReference.child(path)
                             .child(key)
                             .setValue(message)
                     }
