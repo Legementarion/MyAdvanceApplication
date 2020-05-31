@@ -39,7 +39,7 @@ class RedditNewsListActivity : AppCompatActivity() {
         tabs.setupWithViewPager(viewPager)
 
         val imageResId = intArrayOf(  //todo change this icons
-            R.drawable.ic_launcher_foreground,
+            R.drawable.ic_baseline_whatshot_24,
             R.drawable.ic_launcher_foreground,
             R.drawable.ic_launcher_foreground,
             R.drawable.ic_launcher_foreground

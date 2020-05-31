@@ -75,9 +75,9 @@ dependencies {
     implementation 'com.google.firebase:firebase-database:19.3.0'
     implementation 'com.google.firebase:firebase-storage:19.1.1'
     implementation 'com.google.firebase:firebase-core:17.4.2'
+    implementation 'com.google.firebase:firebase-messaging:20.2.0'
     implementation 'com.google.firebase:firebase-auth:19.3.1'
 //    implementation 'com.google.firebase:firebase-config'
-//    implementation 'com.google.firebase:firebase-messaging'
 //    implementation 'com.google.firebase:firebase-inappmessaging-display'
 
     implementation 'com.firebaseui:firebase-ui-database:6.2.1'

@@ -6,6 +6,7 @@ import com.lego.myadvanceapplication.R
 import com.lego.myadvanceapplication.ui.base.navigateToChat
 import com.lego.myadvanceapplication.ui.base.navigateToFeed
 import com.lego.myadvanceapplication.ui.base.navigateToSettings
+import com.lego.myadvanceapplication.ui.base.navigateToSignIn
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -28,6 +29,10 @@ class MainActivity : AppCompatActivity() {
 
         chatBtn.setOnClickListener {
             navigateToChat()
+        }
+
+        profileBtn.setOnClickListener {
+            navigateToSignIn()
         }
 
     }

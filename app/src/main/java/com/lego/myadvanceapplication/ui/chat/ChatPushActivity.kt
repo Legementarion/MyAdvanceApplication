@@ -1,6 +1,5 @@
 package com.lego.myadvanceapplication.ui.chat
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -10,7 +9,7 @@ import androidx.viewpager.widget.ViewPager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.lego.myadvanceapplication.R
-import com.lego.myadvanceapplication.ui.signin.SignInActivity
+import com.lego.myadvanceapplication.ui.base.navigateToSignIn
 import kotlinx.android.synthetic.main.activity_chat.*
 
 class ChatPushActivity : AppCompatActivity() {
@@ -29,7 +28,7 @@ class ChatPushActivity : AppCompatActivity() {
         firebaseUser = FirebaseAuth.getInstance().currentUser
         if (firebaseUser == null) {
             // Not signed in, launch the Sign In activity
-            startActivity(Intent(this, SignInActivity::class.java))
+            navigateToSignIn()
             finish()
             return
         }
