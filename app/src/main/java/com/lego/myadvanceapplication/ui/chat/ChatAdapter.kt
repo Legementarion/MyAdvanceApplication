@@ -15,9 +15,9 @@ import com.lego.myadvanceapplication.R
 import com.lego.myadvanceapplication.data.models.Message
 import com.lego.myadvanceapplication.domain.MessageLock
 import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.item_chat_message.view.*
+import kotlinx.android.synthetic.main.item_chat_message_shared.view.*
 
-class ChatAdapter(options: FirebaseRecyclerOptions<Message>) :
+class ChatAdapter(options: FirebaseRecyclerOptions<Message>, val type: ChatType) :
     FirebaseRecyclerAdapter<Message, ChatAdapter.MessageViewHolder>(options) {
 
     override fun onCreateViewHolder(
@@ -27,7 +27,10 @@ class ChatAdapter(options: FirebaseRecyclerOptions<Message>) :
         val inflater = LayoutInflater.from(parent.context)
         return MessageViewHolder(
             inflater.inflate(
-                R.layout.item_chat_message,
+                when (type) {
+                    ChatType.Public -> R.layout.item_chat_message_shared
+                    else -> R.layout.item_chat_message
+                },
                 parent,
                 false
             )

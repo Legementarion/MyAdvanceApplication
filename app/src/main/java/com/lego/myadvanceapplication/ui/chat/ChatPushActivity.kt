@@ -49,7 +49,7 @@ class ChatPushActivity : AppCompatActivity() {
 
             override fun onPageScrollStateChanged(state: Int) {}
         })
-
+        viewPager.offscreenPageLimit = 0
         tabs.setupWithViewPager(viewPager)
 
     }
@@ -59,14 +59,14 @@ class ChatPushActivity : AppCompatActivity() {
 
         override fun getItem(position: Int): Fragment {
             return when (position) {
-                0 -> ChatTodoFragment.newInstance(ChatType.Public)
+                ChatType.Public.type -> ChatTodoFragment.newInstance(ChatType.Public)
                 else -> ChatTodoFragment.newInstance(ChatType.My)
             }
         }
 
         override fun getPageTitle(position: Int): CharSequence {
             return when (position) {
-                0 -> "Public"
+                ChatType.Public.type -> "Public"
                 else -> "Only My"
             }
         }
@@ -78,7 +78,7 @@ class ChatPushActivity : AppCompatActivity() {
 
 }
 
-enum class ChatType {
-    Public,
-    My
+enum class ChatType(val type: Int) {
+    Public(0),
+    My(1)
 }
