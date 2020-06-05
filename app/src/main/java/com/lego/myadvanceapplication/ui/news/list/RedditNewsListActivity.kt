@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
-import androidx.viewpager.widget.ViewPager.OnPageChangeListener
 import com.lego.myadvanceapplication.R
 import kotlinx.android.synthetic.main.activity_reddit_news_list.*
 
@@ -22,19 +21,6 @@ class RedditNewsListActivity : AppCompatActivity() {
         val pagerAdapter = RedditPagerAdapter(supportFragmentManager)
         viewPager.adapter = pagerAdapter
         viewPager.offscreenPageLimit = PAGE_COUNT
-
-        viewPager.addOnPageChangeListener(object : OnPageChangeListener {
-            override fun onPageSelected(position: Int) {
-            }
-
-            override fun onPageScrolled(
-                position: Int, positionOffset: Float,
-                positionOffsetPixels: Int
-            ) {
-            }
-
-            override fun onPageScrollStateChanged(state: Int) {}
-        })
 
         tabs.setupWithViewPager(viewPager)
 

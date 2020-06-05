@@ -15,7 +15,8 @@ import com.firebase.ui.database.FirebaseRecyclerOptions
 import com.firebase.ui.database.SnapshotParser
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.database.*
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.lego.myadvanceapplication.R
@@ -75,9 +76,10 @@ class ChatTodoFragment : Fragment() {
         firebaseAuth = FirebaseAuth.getInstance()
         firebaseUser = firebaseAuth.currentUser
         username = firebaseUser?.displayName ?: ANONYMOUS
-
+        var type: ChatType = ChatType.Public
         arguments?.getSerializable(CHAT_EXTRA)?.let {
-            path += when (it as ChatType) {
+            type = it as ChatType
+            path += when (type) {
                 ChatType.My -> {
                     "$MESSAGES_CHILD/$username"
                 }
@@ -111,19 +113,8 @@ class ChatTodoFragment : Fragment() {
         val options: FirebaseRecyclerOptions<Message> = FirebaseRecyclerOptions.Builder<Message>()
             .setQuery(messagesRef, parser)
             .build()
-        messagesRef.database.reference.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onCancelled(dataError: DatabaseError) { // no need
-            }
 
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                if (firebaseAdapter.itemCount > 0) {
-                    showEmptyState(true)
-                } else {
-                    showEmptyState()
-                }
-            }
-        })
-        firebaseAdapter = ChatAdapter(options)
+        firebaseAdapter = ChatAdapter(options, type)
 
 
         firebaseAdapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
@@ -135,6 +126,7 @@ class ChatTodoFragment : Fragment() {
                 // If the recycler view is initially being loaded or the
                 // user is at the bottom of the list, scroll to the bottom
                 // of the list to show the newly added message.
+                checkState()
                 if (lastVisiblePosition == -1 ||
                     positionStart >= messageCount - 1 &&
                     lastVisiblePosition == positionStart - 1
@@ -222,6 +214,13 @@ class ChatTodoFragment : Fragment() {
         }
     }
 
+    private fun checkState() {
+        if (firebaseAdapter.itemCount > 0) {
+            showEmptyState(true)
+        } else {
+            showEmptyState()
+        }
+    }
 
     override fun onPause() {
         firebaseAdapter.stopListening()

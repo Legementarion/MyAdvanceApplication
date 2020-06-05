@@ -2,12 +2,10 @@ package com.lego.myadvanceapplication.core.notification
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.app.PendingIntent
 import android.content.Context
-import android.content.Intent
+import android.graphics.Color
 import android.os.Build
 import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
 import com.lego.myadvanceapplication.R
 
 class NotificationController(private val context: Context) {
@@ -54,6 +52,39 @@ class NotificationController(private val context: Context) {
 //            // notificationId is a unique int for each notification that you must define
 //            notify(notificationId, builder.build())
 //        }
+    }
+
+    fun NotificationManager.sendNotification(messageBody: String, applicationContext: Context) {
+//        val builder = NotificationCompat.Builder(
+//            applicationContext,
+//            applicationContext.getString(R.string.egg_notification_channel_id)
+//        ).setSmallIcon(R.drawable.cooked_egg)
+//            .setContentTitle(applicationContext.getString(R.string.notification_title))
+//            .setContentText(messageBody)
+//        notify(NOTIFICATION_ID, builder.build())
+
+    }
+
+    private fun createChannel(channelId: String, channelName: String) {
+        // TODO: Step 1.6 START create a channel
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val notificationChannel = NotificationChannel(
+                channelId,
+                channelName,
+                // TODO: Step 2.4 change importance
+                NotificationManager.IMPORTANCE_LOW
+            )
+            // TODO: Step 2.6 disable badges for this channel
+
+            notificationChannel.enableLights(true)
+            notificationChannel.lightColor = Color.RED
+            notificationChannel.enableVibration(true)
+            notificationChannel.description = "Time for breakfast"
+
+            val notificationManager = context.getSystemService(NotificationManager::class.java)
+            notificationManager?.createNotificationChannel(notificationChannel)
+        }
+        // TODO: Step 1.6 END create channel
     }
 
 }

@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.lego.myadvanceapplication.R
 import com.lego.myadvanceapplication.data.RedditApi.Companion.BASE_URL
 import com.lego.myadvanceapplication.domain.news.model.RedditPost
+import com.lego.myadvanceapplication.ui.utils.isTypeOrEmpty
 import com.lego.myadvanceapplication.ui.utils.loadImage
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.news_list_item.view.*
@@ -56,11 +57,16 @@ class RedditNewsListAdapter(
             with(containerView) {
                 tvCaption.text = post.title
                 tvChannelName.text = post.subreddit
-                //todo format 44k instead 44987, samee for likes
+                //todo format 44k instead 44987, same for likes
                 tvCommentsNumber.text = post.numComments.toString()
                 tvLikeCount.text = post.score.toString()
                 // todo gif
-                ivNewCover.loadImage(post.thumbnail)
+                if (post.thumbnail.isTypeOrEmpty()) {
+                    ivNewCover.visibility = View.GONE
+                } else {
+                    ivNewCover.visibility = View.VISIBLE
+                    ivNewCover.loadImage(post.thumbnail)
+                }
                 ivNewCover.setOnClickListener { imageClickListener(post.thumbnail) }
                 setOnClickListener {
                     clickListener(BASE_URL + post.permalink)

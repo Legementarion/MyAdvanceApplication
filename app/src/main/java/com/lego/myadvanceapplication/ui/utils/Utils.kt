@@ -19,6 +19,16 @@ fun ImageView.loadImage(url: String) =
     loadImage(url, context)
         .into(this)
 
+
+fun Context.loadImageBitmap(url: String) =
+    Glide
+        .with(this)
+        .asBitmap()
+        .load(url)
+        .placeholder(R.drawable.ic_launcher_foreground)
+        .error(R.drawable.ic_launcher_foreground)
+
+
 fun ImageView.loadCropImage(url: String) =
     loadImage(url, context)
         .centerCrop()
@@ -32,10 +42,14 @@ fun ImageView.loadGif(url: String) =
         .load(url)
         .into(this)
 
+fun String.isTypeOrEmpty(): Boolean {
+    return this == "image" || this == "default" || this == "self" || this == "nsfw" || this.isEmpty()
+}
+
 fun showErrorOrLog(view: View, text: String, showToast: Boolean = false) {
     Timber.d(text)
     if (showToast) {
-        Snackbar.make(view, "Hello Android 7", Snackbar.LENGTH_LONG)
+        Snackbar.make(view, text, Snackbar.LENGTH_LONG)
             .show()
     }
 }
