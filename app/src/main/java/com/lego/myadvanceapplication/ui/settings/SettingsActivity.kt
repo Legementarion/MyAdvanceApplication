@@ -1,7 +1,6 @@
 package com.lego.myadvanceapplication.ui.settings
 
-import android.app.UiModeManager.MODE_NIGHT_NO
-import android.app.UiModeManager.MODE_NIGHT_YES
+import android.app.UiModeManager.*
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.MenuItem

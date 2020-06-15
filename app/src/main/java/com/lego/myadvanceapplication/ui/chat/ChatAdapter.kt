@@ -1,94 +1,136 @@
 package com.lego.myadvanceapplication.ui.chat
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.appcompat.widget.PopupMenu
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.firebase.ui.database.FirebaseRecyclerOptions
-import com.google.firebase.storage.FirebaseStorage
 import com.lego.myadvanceapplication.R
 import com.lego.myadvanceapplication.data.models.Message
 import com.lego.myadvanceapplication.domain.MessageLock
+import com.lego.myadvanceapplication.ui.utils.loadCropImage
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_chat_message_shared.view.*
 
-class ChatAdapter(options: FirebaseRecyclerOptions<Message>, val type: ChatType) :
-    FirebaseRecyclerAdapter<Message, ChatAdapter.MessageViewHolder>(options) {
+class ChatAdapter(options: FirebaseRecyclerOptions<Message>, private val type: ChatType) :
+    FirebaseRecyclerAdapter<Message, ChatAdapter.PrivateMessageViewHolder>(options) {
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): MessageViewHolder {
+    ): PrivateMessageViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        return MessageViewHolder(
-            inflater.inflate(
-                when (type) {
-                    ChatType.Public -> R.layout.item_chat_message_shared
-                    else -> R.layout.item_chat_message
-                },
-                parent,
-                false
+        return when (type) {
+            ChatType.Public -> SharedMessageViewHolder(
+                inflater.inflate(
+                    R.layout.item_chat_message_shared,
+                    parent,
+                    false
+                )
             )
-        )
+            else -> PrivateMessageViewHolder(
+                inflater.inflate(
+                    R.layout.item_chat_message,
+                    parent,
+                    false
+                )
+            )
+        }
     }
 
-    override fun onBindViewHolder(viewHolder: MessageViewHolder, position: Int, message: Message) {
+    override fun onBindViewHolder(
+        viewHolder: PrivateMessageViewHolder,
+        position: Int,
+        message: Message
+    ) {
         getItem(position).let { viewHolder.bindData(it) }
     }
 
-    inner class MessageViewHolder(override val containerView: View) :
+
+    open inner class PrivateMessageViewHolder(override val containerView: View) :
         RecyclerView.ViewHolder(containerView), LayoutContainer {
 
-        fun bindData(message: Message) {
+        open fun bindData(message: Message) {
+
             with(containerView) {
+
                 if (message.message != null) {
-                    messageTextView.text = MessageLock.retrieveMessage(message.message)
-                    messageTextView.visibility = TextView.VISIBLE
+                    tvMessage.text = MessageLock.retrieveMessage(message.message)
+                    tvMessage.visibility = TextView.VISIBLE
 //                    messageImageView.visibility = ImageView.GONE
-                } else if (message.imageUrl != null) {
-                    val imageUrl: String = message.imageUrl
-                    if (imageUrl.startsWith("gs://")) {
-                        val storageReference = FirebaseStorage.getInstance()
-                            .getReferenceFromUrl(imageUrl)
-                        storageReference.downloadUrl.addOnCompleteListener { task ->
-                            if (task.isSuccessful) {
-                                val downloadUrl: String =
-                                    task.result.toString()
-//                                Glide.with(messageImageView.context)
-//                                    .load(downloadUrl)
-//                                    .into(messageImageView)
-                            } else {
-                                Log.w(
-                                    "Getting download url was not successful.",
-                                    task.exception
-                                )
-                            }
-                        }
-                    } else {
-//                        Glide.with(messageImageView.context)
-//                            .load(message.imageUrl)
-//                            .into(messageImageView)
-                    }
-//                    messageImageView.visibility = ImageView.VISIBLE
-                    messageTextView.visibility = TextView.GONE
                 }
-                messengerTextView.text = message.user
-                if (message.photoUrl == null) {
-                    messengerImageView.setImageDrawable(
+                //todo upload images
+//                else if (message.imageUrl != null) {
+////                    val imageUrl: String = message.imageUrl
+////                    if (imageUrl.startsWith("gs://")) {
+////                        val storageReference = FirebaseStorage.getInstance()
+////                            .getReferenceFromUrl(imageUrl)
+////                        storageReference.downloadUrl.addOnCompleteListener { task ->
+////                            if (task.isSuccessful) {
+////                                val downloadUrl: String =
+////                                    task.result.toString()
+//////                                Glide.with(messageImageView.context)
+//////                                    .load(downloadUrl)
+//////                                    .into(messageImageView)
+////                            } else {
+////                                Log.w(
+////                                    "Getting download url was not successful.",
+////                                    task.exception
+////                                )
+////                            }
+////                        }
+////                    } else {
+//////                        Glide.with(messageImageView.context)
+//////                            .load(message.imageUrl)
+//////                            .into(messageImageView)
+////                    }
+//////                    messageImageView.visibility = ImageView.VISIBLE
+////                    tvMessage.visibility = TextView.GONE
+////                }
+
+                btnEdit.setOnClickListener {
+                    val popup = PopupMenu(containerView.context, btnEdit)
+                    popup.inflate(R.menu.todo_menu)
+
+                    popup.setOnMenuItemClickListener {
+                        return@setOnMenuItemClickListener when (it.itemId) {
+                            R.id.navigation_drawer_item1 ->
+                                true
+                            R.id.navigation_drawer_item2 ->
+                                true
+                            R.id.navigation_drawer_item3 ->
+                                true
+                            else -> false
+                        }
+                    }
+                    popup.show()
+                }
+
+
+            }
+        }
+    }
+
+    inner class SharedMessageViewHolder(override val containerView: View) :
+        PrivateMessageViewHolder(containerView) {
+
+        override fun bindData(message: Message) {
+            super.bindData(message)
+            with(containerView) {
+
+                tvAuthor.text = message.user
+
+                message.photoUrl?.let { ivAuthor.loadCropImage(it) } ?: run {
+                    ivAuthor.setImageDrawable(
                         ContextCompat.getDrawable(
-                            messengerImageView.context,
+                            ivAuthor.context,
                             R.drawable.ic_account_circle_black_36dp
                         )
                     )
-                } else {
-                    Glide.with(messengerImageView.context)
-                        .load(message.photoUrl)
-                        .into(messengerImageView)
                 }
             }
         }

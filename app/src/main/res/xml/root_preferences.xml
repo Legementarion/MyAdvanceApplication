@@ -13,6 +13,7 @@
 
         <SwitchPreferenceCompat
             app:key="@string/pref_key_night"
+            app:icon="@drawable/ic_baseline_settings_24"
             app:title="@string/dark_mode" />
 
     </PreferenceCategory>

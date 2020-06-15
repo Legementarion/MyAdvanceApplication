@@ -10,49 +10,51 @@
         android:layout_height="wrap_content"
         android:layout_margin="8dp">
 
-        <ImageView
-            android:id="@+id/messengerImageView"
+        <ImageButton
+            android:id="@+id/btnEdit"
             android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_marginEnd="10dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@android:drawable/ic_menu_edit" />
+
+        <ImageView
+            android:id="@+id/ivAuthor"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:src="@drawable/ic_account_circle_black_36dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/messageTextView"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/messageTextView"
+            android:id="@+id/tvMessage"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            app:layout_constraintBottom_toBottomOf="@+id/messengerImageView"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/messengerImageView"
+            app:layout_constraintEnd_toStartOf="@+id/btnEdit"
+            app:layout_constraintStart_toEndOf="@+id/ivAuthor"
+            app:layout_constraintTop_toTopOf="parent"
             tools:text="Ololo test text, veryy log log text heteeeeeee" />
 
-        <!--    <ImageView-->
-        <!--        android:id="@+id/messageImageView"-->
-        <!--        android:layout_width="0dp"-->
-        <!--        android:layout_height="wrap_content"-->
-        <!--        android:adjustViewBounds="true"-->
-        <!--        android:background="@color/colorPrimary"-->
-        <!--        android:scaleType="fitCenter"-->
-        <!--        app:layout_constraintBottom_toBottomOf="@+id/messageTextView"-->
-        <!--        app:layout_constraintEnd_toStartOf="@+id/messengerTextView"-->
-        <!--        app:layout_constraintStart_toEndOf="@+id/messageTextView"-->
-        <!--        app:layout_constraintTop_toBottomOf="@+id/messageTextView" />-->
-
         <TextView
-            android:id="@+id/messengerTextView"
-            android:layout_width="wrap_content"
+            android:id="@+id/tvAuthor"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
             android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/messageTextView"
-            app:layout_constraintTop_toBottomOf="@+id/messageTextView"
+            app:layout_constraintEnd_toEndOf="@+id/ivAuthor"
+            app:layout_constraintStart_toStartOf="@+id/ivAuthor"
+            app:layout_constraintTop_toBottomOf="@+id/ivAuthor"
             tools:text="Author" />
+
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
