@@ -15,18 +15,14 @@ fun loadImage(url: String, context: Context) =
         .placeholder(R.drawable.ic_launcher_foreground)
         .error(R.drawable.ic_launcher_foreground)
 
-fun ImageView.loadImage(url: String) =
+fun ImageView.loadImage(url: String, thumbnailURL: String = "") =
     loadImage(url, context)
+        .thumbnail(
+            Glide
+                .with(context)
+                .load(thumbnailURL)
+        )
         .into(this)
-
-
-fun Context.loadImageBitmap(url: String) =
-    Glide
-        .with(this)
-        .asBitmap()
-        .load(url)
-        .placeholder(R.drawable.ic_launcher_foreground)
-        .error(R.drawable.ic_launcher_foreground)
 
 
 fun ImageView.loadCropImage(url: String) =

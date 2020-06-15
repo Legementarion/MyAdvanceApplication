@@ -10,6 +10,7 @@ import com.lego.myadvanceapplication.R
 import com.lego.myadvanceapplication.data.RedditApi.Companion.BASE_URL
 import com.lego.myadvanceapplication.domain.news.model.RedditPost
 import com.lego.myadvanceapplication.ui.utils.isTypeOrEmpty
+import com.lego.myadvanceapplication.ui.utils.loadGif
 import com.lego.myadvanceapplication.ui.utils.loadImage
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.news_list_item.view.*
@@ -60,14 +61,20 @@ class RedditNewsListAdapter(
                 //todo format 44k instead 44987, same for likes
                 tvCommentsNumber.text = post.numComments.toString()
                 tvLikeCount.text = post.score.toString()
-                // todo gif
-                if (post.thumbnail.isTypeOrEmpty()) {
-                    ivNewCover.visibility = View.GONE
-                } else {
+
+                if (post.isGif) {
+                    post.gifUrl?.let { ivNewCover.loadGif(it) }
+                } else if (post.imageUrl != null) {
                     ivNewCover.visibility = View.VISIBLE
-                    ivNewCover.loadImage(post.thumbnail)
+                    if (!post.thumbnail.isTypeOrEmpty()) {
+                        ivNewCover.loadImage(post.imageUrl)
+                    } else {
+                        ivNewCover.loadImage(post.imageUrl, post.thumbnail)
+                    }
+                } else {
+                    ivNewCover.visibility = View.GONE
                 }
-                ivNewCover.setOnClickListener { imageClickListener(post.thumbnail) }
+                ivNewCover.setOnClickListener { post.imageUrl?.let { url -> imageClickListener(url) } }
                 setOnClickListener {
                     clickListener(BASE_URL + post.permalink)
                 }

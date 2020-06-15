@@ -13,15 +13,26 @@ data class Post(
     val thumbnail: String,
     val url: String,
     val permalink: String,
-    @SerializedName("is_video") val isVideo: Boolean,
-    @SerializedName("media") val media: Media
-)
-
-data class Media(
-    @SerializedName("reddit_video") val redditVideo: RedditVideo
+    @SerializedName("preview") val preview: Media?,
+    @SerializedName("is_video") val isVideo: Boolean
 )
 
 data class RedditVideo(
     @SerializedName("is_gif") val isGif: Boolean,
     @SerializedName("fallback_url") val url: String
+)
+
+data class Media(
+    @SerializedName("images") val images: List<RedditImageSource>?,
+    @SerializedName("reddit_video_preview") val redditVideo: RedditVideo
+)
+
+data class RedditImageSource(
+    val source: ImageSource?
+)
+
+data class ImageSource(
+    val url: String,
+    val width: Int,
+    val height: Int
 )

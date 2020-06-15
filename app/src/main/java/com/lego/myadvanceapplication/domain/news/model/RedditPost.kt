@@ -19,7 +19,10 @@ data class RedditPost(
     val numComments: Int,
     val created: Long,
     val thumbnail: String,
+    val imageUrl: String?,
     val url: String,
     val permalink: String,
-    val isVideo: Boolean
+    val isVideo: Boolean,
+    val isGif: Boolean,
+    val gifUrl: String?
 )
