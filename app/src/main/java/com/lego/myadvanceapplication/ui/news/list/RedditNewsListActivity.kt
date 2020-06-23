@@ -28,7 +28,7 @@ class RedditNewsListActivity : AppCompatActivity() {
             R.drawable.ic_baseline_whatshot_24,
             R.drawable.ic_launcher_foreground,
             R.drawable.ic_launcher_foreground,
-            R.drawable.ic_launcher_foreground
+            R.drawable.ic_star
         )
 
         for (i in imageResId.indices) {

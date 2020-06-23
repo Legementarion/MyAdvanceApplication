@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.firebase.ui.database.FirebaseRecyclerOptions
@@ -20,6 +21,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.lego.myadvanceapplication.R
+import com.lego.myadvanceapplication.core.notification.MyFirebaseMessagingService
 import com.lego.myadvanceapplication.data.models.Message
 import com.lego.myadvanceapplication.domain.MessageLock
 import kotlinx.android.synthetic.main.chat_fragment.*
@@ -54,7 +56,7 @@ class ChatTodoFragment : Fragment() {
     private lateinit var firebaseAdapter: ChatAdapter
     private var firebaseUser: FirebaseUser? = null
 
-    private val sharedPreferences: SharedPreferences? = null
+    private lateinit var sharedPreferences: SharedPreferences
     private val viewModel: ChatViewModel by viewModel()
 
     private var username: String = ANONYMOUS
@@ -90,6 +92,7 @@ class ChatTodoFragment : Fragment() {
         }
 
         showEmptyState()
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
 
         firebaseUser?.photoUrl?.let {
             photoUrl = it.toString()
@@ -108,10 +111,10 @@ class ChatTodoFragment : Fragment() {
                 message!!
             }
 
-        val messagesRef: DatabaseReference =
+        val messagesDBRef: DatabaseReference =
             firebaseDatabaseReference.child(path)
         val options: FirebaseRecyclerOptions<Message> = FirebaseRecyclerOptions.Builder<Message>()
-            .setQuery(messagesRef, parser)
+            .setQuery(messagesDBRef, parser)
             .build()
 
         firebaseAdapter = ChatAdapter(options, type)
@@ -139,11 +142,13 @@ class ChatTodoFragment : Fragment() {
         rvMessage.adapter = firebaseAdapter
 
         btnSend.setOnClickListener {
+            val token = sharedPreferences.getString(MyFirebaseMessagingService.TOKEN_TOPIC, "")
             val message = Message(
                 System.currentTimeMillis().toString(),
                 MessageLock.encodeMessage(etMessage.text.toString()),
                 username,
                 System.currentTimeMillis().toString(),
+                token,
                 photoUrl,
                 null /* no image */
             )

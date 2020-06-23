@@ -5,6 +5,7 @@ data class Message(
     val message: String? = null,
     val user: String? = null,
     val time: String? = System.currentTimeMillis().toString(),
+    val token: String? = "",
     val photoUrl: String? = null,
     val imageUrl: String? = null
 )

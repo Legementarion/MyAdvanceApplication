@@ -1,6 +1,8 @@
 package com.lego.myadvanceapplication.core.notification
 
 import android.util.Log
+import androidx.preference.PreferenceManager
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
@@ -12,6 +14,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService(), KoinComponent {
     companion object {
         private const val TAG = "MyFMService"
         private const val ENGAGE_TOPIC = "engage"
+        const val TOKEN_TOPIC = "token"
     }
 
     private val notificationController by inject<NotificationController>()
@@ -27,7 +30,12 @@ class MyFirebaseMessagingService : FirebaseMessagingService(), KoinComponent {
     }
 
     override fun onNewToken(token: String) {
-        Log.d(TAG, "FCM Token: $token")
+        FirebaseDatabase.getInstance().reference.child(TOKEN_TOPIC)
+            .push().setValue(token)
+
+        PreferenceManager.getDefaultSharedPreferences(applicationContext).edit()
+            .putString(TOKEN_TOPIC, token).apply()
+
         // Once a token is generated, we subscribe to topic.
         FirebaseMessaging.getInstance()
             .subscribeToTopic(ENGAGE_TOPIC)
