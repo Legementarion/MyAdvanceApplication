@@ -26,9 +26,9 @@ class RedditNewsListActivity : AppCompatActivity() {
 
         val imageResId = intArrayOf(  //todo change this icons
             R.drawable.ic_baseline_whatshot_24,
-            R.drawable.ic_launcher_foreground,
-            R.drawable.ic_launcher_foreground,
-            R.drawable.ic_star
+            R.drawable.ic_top,
+            R.drawable.ic_star_new,
+            R.drawable.ic_save
         )
 
         for (i in imageResId.indices) {
