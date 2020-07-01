@@ -105,9 +105,8 @@ class ChatTodoFragment : Fragment() {
         // New child entries
         firebaseDatabaseReference = FirebaseDatabase.getInstance().reference
         val parser: SnapshotParser<Message> =
-            SnapshotParser<Message> { snapshot ->
+            SnapshotParser { snapshot ->
                 val message: Message? = snapshot.getValue(Message::class.java)
-                message?.id = snapshot.key
                 message!!
             }
 

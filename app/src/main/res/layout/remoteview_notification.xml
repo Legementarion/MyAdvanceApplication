@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/notification_background"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <include
+        layout="@layout/notification_template_icon_group"
+        android:layout_width="@dimen/notification_icon_size"
+        android:layout_height="@dimen/notification_icon_size" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        android:layout_marginStart="@dimen/notification_icon_size"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/notification_main_column_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="@dimen/notification_icon_size"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/notification_main_column"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:orientation="vertical"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/remoteview_notification_headline"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    tools:text="ololo title"
+                    android:layout_weight="0.5"
+                    android:textAppearance="@style/TextAppearance.Compat.Notification.Title" />
+
+                <TextView
+                    android:id="@+id/remoteview_notification_short_message"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    tools:text="ololo title"
+                    android:layout_weight="0.5"
+                    android:textAppearance="@style/TextAppearance.Compat.Notification.Title" />
+
+            </LinearLayout>
+
+            <FrameLayout
+                android:id="@+id/right_side"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:paddingTop="2dp">
+
+                <ViewStub
+                    android:id="@+id/time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end|top"
+                    android:layout="@layout/notification_template_part_time"
+                    android:visibility="gone" />
+
+                <ViewStub
+                    android:id="@+id/chronometer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end|top"
+                    android:layout="@layout/notification_template_part_chronometer"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/info"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end|bottom"
+                    android:layout_marginTop="20dp"
+                    android:singleLine="true"
+                    android:textAppearance="@style/TextAppearance.Compat.Notification.Info" />
+            </FrameLayout>
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/action_divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#29000000"
+            android:visibility="gone"
+            tools:ignore="ContentDescription" />
+
+        <LinearLayout
+            android:id="@+id/actions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="-8dp"
+            android:orientation="horizontal"
+            android:visibility="gone">
+            <!-- actions will be added here -->
+        </LinearLayout>
+    </LinearLayout>
+</FrameLayout>

@@ -2,89 +2,95 @@ package com.lego.myadvanceapplication.core.notification
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.os.Build
+import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
+import com.bumptech.glide.request.target.NotificationTarget
+import com.google.firebase.messaging.RemoteMessage
 import com.lego.myadvanceapplication.R
+import com.lego.myadvanceapplication.ui.chat.ChatPushActivity
+import com.lego.myadvanceapplication.ui.utils.loadBitmap
+import java.util.*
+
 
 class NotificationController(private val context: Context) {
 
     companion object {
-        private val CHANNEL_ID = ""
-    }
-
-    //todo icon and titles for notifications
-    private fun createNotificationChannel() {
-        // Create the NotificationChannel, but only on API 26+ because
-        // the NotificationChannel class is new and not in the support library
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//            val name = context.getString(R.string.channel_name)
-//            val descriptionText = context.getString(R.string.channel_description)
-//            val importance = NotificationManager.IMPORTANCE_HIGH
-//            val channel = NotificationChannel(CHANNEL_ID, name, importance).apply {
-//                description = descriptionText
-//            }
-//            // Register the channel with the system
-//            val notificationManager: NotificationManager =
-//                context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-//            notificationManager.createNotificationChannel(channel)
-//        }
-    }
-
-    fun createNotification() {
-//        // Create an explicit intent for an Activity in your app
-//        val intent = Intent(context, AlertDetails::class.java).apply {
-//            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-//        }
-//        val pendingIntent: PendingIntent = PendingIntent.getActivity(context, 0, intent, 0)
-//
-//        val builder = NotificationCompat.Builder(context, CHANNEL_ID)
-//            .setSmallIcon(R.drawable.notification_icon)
-//            .setContentTitle("My notification")
-//            .setContentText("Hello World!")
-//            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-//            // Set the intent that will fire when the user taps the notification
-//            .setContentIntent(pendingIntent)
-//            .setAutoCancel(true)
-//
-//        with(NotificationManagerCompat.from(context)) {
-//            // notificationId is a unique int for each notification that you must define
-//            notify(notificationId, builder.build())
-//        }
-    }
-
-    fun NotificationManager.sendNotification(messageBody: String, applicationContext: Context) {
-//        val builder = NotificationCompat.Builder(
-//            applicationContext,
-//            applicationContext.getString(R.string.egg_notification_channel_id)
-//        ).setSmallIcon(R.drawable.cooked_egg)
-//            .setContentTitle(applicationContext.getString(R.string.notification_title))
-//            .setContentText(messageBody)
-//        notify(NOTIFICATION_ID, builder.build())
+        private const val CHANNEL_ID = "AdvanceChannelID"
+        private const val CHANNEL_NAME = "AdvanceChannel"
+        private const val GROUP_KEY_TODO = "com.lego.myadvanceapplication"
 
     }
 
-    private fun createChannel(channelId: String, channelName: String) {
-        // TODO: Step 1.6 START create a channel
+    fun createNotification(remoteMessage: RemoteMessage) {
+        val title = remoteMessage.data["title"] ?: ""
+        val message = remoteMessage.data["body"] ?: ""
+        val icon = remoteMessage.data["icon"] ?: ""
+
+        val notificationId = Random().nextInt()
+
+        val remoteView = RemoteViews(context.packageName, R.layout.remoteview_notification).apply {
+            setImageViewResource(R.id.icon, R.drawable.ic_star)
+            setTextViewText(R.id.remoteview_notification_headline, title)
+            setTextViewText(R.id.remoteview_notification_short_message, message)
+        }
+
+
+        // Create an explicit intent for an Activity in your app
+        val intent = Intent(context, ChatPushActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+        val pendingIntent: PendingIntent = PendingIntent.getActivity(context, 0, intent, 0)
+
+        createChannel()
+        val builder = NotificationCompat.Builder(context, CHANNEL_ID)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setSmallIcon(R.drawable.ic_star)
+            // Set the intent that will fire when the user taps the notification
+            .setContentIntent(pendingIntent)
+            .setGroup(GROUP_KEY_TODO)
+            .setContent(remoteView)
+            .setAutoCancel(true)
+
+        val notification = builder.build()
+
+        val target = NotificationTarget(
+            context,
+            R.id.icon,
+            remoteView,
+            notification,
+            notificationId
+        )
+
+        target.loadBitmap(icon, context)
+
+        with(NotificationManagerCompat.from(context)) {
+            // notificationId is a unique int for each notification that you must define
+            notify(notificationId, notification)
+        }
+    }
+
+    private fun createChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val notificationChannel = NotificationChannel(
-                channelId,
-                channelName,
-                // TODO: Step 2.4 change importance
-                NotificationManager.IMPORTANCE_LOW
+                CHANNEL_ID,
+                CHANNEL_NAME,
+                NotificationManager.IMPORTANCE_HIGH
             )
-            // TODO: Step 2.6 disable badges for this channel
 
             notificationChannel.enableLights(true)
             notificationChannel.lightColor = Color.RED
             notificationChannel.enableVibration(true)
-            notificationChannel.description = "Time for breakfast"
+            notificationChannel.description = "Todo notification"
 
             val notificationManager = context.getSystemService(NotificationManager::class.java)
             notificationManager?.createNotificationChannel(notificationChannel)
         }
-        // TODO: Step 1.6 END create channel
     }
 
 }

@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.View
 import android.widget.ImageView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.NotificationTarget
 import com.google.android.material.snackbar.Snackbar
 import com.lego.myadvanceapplication.R
 import timber.log.Timber
@@ -14,6 +15,16 @@ fun loadImage(url: String, context: Context) =
         .load(url)
         .placeholder(R.drawable.ic_launcher_foreground)
         .error(R.drawable.ic_launcher_foreground)
+
+
+fun NotificationTarget.loadBitmap(url: String, context: Context) =
+    Glide
+        .with(context)
+        .asBitmap()
+        .load(url)
+        .error(R.drawable.ic_launcher_foreground)
+        .into(this)
+
 
 fun ImageView.loadImage(url: String, thumbnailURL: String = "") =
     loadImage(url, context)

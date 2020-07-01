@@ -59,4 +59,14 @@
         app:layout_constraintTop_toTopOf="@+id/settingsBtn"
         app:srcCompat="@drawable/ic_baseline_account_box_24" />
 
+    <Button
+        android:id="@+id/testBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="42dp"
+        android:layout_marginBottom="41dp"
+        android:text="Test!"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

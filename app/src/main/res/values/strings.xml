@@ -26,5 +26,6 @@
     <string name="feed">Feed</string>
     <string name="chat">TODO Chat</string>
     <string name="message_hint">Type your message here...</string>
+    <string name="avatar">avatar</string>
 
 </resources>
