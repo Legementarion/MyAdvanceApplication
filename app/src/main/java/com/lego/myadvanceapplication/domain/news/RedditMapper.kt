@@ -23,7 +23,7 @@ object RedditMapper {
                 RedditPost(
                     it.post.id,
                     it.post.title,
-                    it.post.author,
+                    it.post.ороооро,
                     it.post.subreddit,
                     it.post.score,
                     it.post.numComments,
