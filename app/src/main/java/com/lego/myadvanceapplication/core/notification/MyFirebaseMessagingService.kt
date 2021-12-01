@@ -4,8 +4,8 @@ import androidx.preference.PreferenceManager
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-import org.koin.core.KoinComponent
-import org.koin.core.inject
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
 class MyFirebaseMessagingService : FirebaseMessagingService(), KoinComponent {
 
